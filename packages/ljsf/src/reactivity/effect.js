@@ -15,7 +15,10 @@ export class Effect extends Observer {
   }
 
   execute() {
-    this.observe(this.#fn)
+    if (this.isDisposed) return
+
+    this.clear()
+    this.observe(() => this.scope(this.#fn))
   }
 }
 

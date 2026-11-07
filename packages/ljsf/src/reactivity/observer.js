@@ -1,3 +1,5 @@
+import { Owner } from './owner.js'
+
 let activeObserver = null
 
 export class Dependency {
@@ -19,7 +21,7 @@ export class Dependency {
   }
 }
 
-export class Observer {
+export class Observer extends Owner {
   dependencies = new Set()
 
   observe(fn) {
@@ -37,6 +39,7 @@ export class Observer {
 
   dispose() {
     this.#unsubscribe()
+    super.dispose()
   }
 
   #unsubscribe() {
