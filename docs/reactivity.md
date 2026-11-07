@@ -85,3 +85,7 @@ one that clamps a value, is fine.
 
 An effect that throws does not stop the other queued effects. They still run, and the first error is
 thrown after them.
+
+Inside `batch`, these errors are thrown from `batch`, so the writer can catch them. When effects run in
+the microtask flush (a write without `batch`), the writer's code has already finished: the error cannot
+be caught there and surfaces as an uncaught exception (the console, `window.onerror`).
