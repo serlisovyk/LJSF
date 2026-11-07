@@ -16,6 +16,7 @@ the workspace.
 - Vitest + happy-dom test setup in `packages/ljsf`
 - ESLint (flat config), Prettier, Stylelint and a pre-commit hook from the first commit
 - Size budgets for the framework core and Shelf in `.size-limit.json`, enforced by CI
+- Fine-grained reactivity: `reactive`, `effect`, `batch`, see [docs/reactivity.md](docs/reactivity.md)
 
 ## 🧰 Tech Stack
 

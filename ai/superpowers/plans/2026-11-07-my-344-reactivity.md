@@ -42,10 +42,10 @@ Each step: failing test committed alone (`test:`) and seen failing, then the cod
    effect in the queue.
 5. `reactive` objects: per-key effects, add/delete/`in`/`Object.keys`, lazy deep wrapping, cached
    wrappers, `Map`/`Set` behavior.
-6. `reactive` arrays: `push`, `splice`, `pop`, `shift`, `unshift`, index write, `length`, iteration, a
+6. Cycles and errors (before arrays, so a self-triggering mutator test cannot hang the run): an effect
+   writing its own dependency throws, the scheduler recovers, other effects run after one throws.
+7. `reactive` arrays: `push`, `splice`, `pop`, `shift`, `unshift`, index write, `length`, iteration, a
    mutator inside an effect.
-7. Cycles and errors: effect writing its own dependency throws, scheduler recovers, other effects run
-   after one throws.
 8. Public entry: `ljsf` exports `reactive`, `effect`, `batch` and no internals.
 
 ## Docs, same change

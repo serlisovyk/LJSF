@@ -25,6 +25,7 @@ Navigation only: where things live and who owns what. How it works is in the cod
 
 - `src/index.js` — the only public entry: everything an app may use is exported here.
 - `src/<module>/` — one folder per module as it lands: `reactivity`, `template`, `component`, `router`, `store`, `query`.
+- `src/reactivity/` — `signal`, `computed`, `effect`, owners, scheduler (`batch`), `reactive()`; only `reactive`, `effect`, `batch` are public.
 - `test/` — Vitest tests in happy-dom, `<name>.test.js`.
 - `vite.config.js` — library build (ES module `dist/ljsf.js`) and the Vitest environment.
 - `package.json` — `exports` maps `ljsf` to `src/index.js`; scripts `build`, `test`, `test:watch`; no runtime dependencies.

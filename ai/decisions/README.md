@@ -54,3 +54,4 @@ Not decisions: one-off task details, plain current-state facts, a choice nobody 
 - [Class components and HTML templates](2026-11-07-class-components-and-html-templates.md)
 - [Directives read property paths only, no `eval`](2026-11-07-directives-with-paths-only.md)
 - [Plain CSS with CSS Modules](2026-11-07-css-modules.md)
+- [Reactivity model: fine-grained, lazy Proxy, batched](2026-11-07-reactivity-model.md)
