@@ -4,5 +4,19 @@
     "path": "packages/ljsf/dist/ljsf.js",
     "limit": "5 kB",
     "gzip": true
+  },
+  {
+    "name": "Shelf JS",
+    "path": "apps/shelf/dist/assets/*.js",
+    "limit": "30 kB",
+    "gzip": true,
+    "rolldown": false
+  },
+  {
+    "name": "Shelf CSS",
+    "path": "apps/shelf/dist/assets/*.css",
+    "limit": "10 kB",
+    "gzip": true,
+    "rolldown": false
   }
 ]

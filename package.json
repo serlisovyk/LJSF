@@ -20,7 +20,7 @@
     "format:check": "prettier . --check",
     "prepare": "husky",
     "test": "pnpm -r test",
-    "size": "pnpm --filter ljsf build && size-limit"
+    "size": "pnpm build && size-limit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
