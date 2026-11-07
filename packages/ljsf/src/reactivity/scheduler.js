@@ -1,3 +1,5 @@
+const MAX_RUNS_PER_FLUSH = 100
+const CYCLE_MESSAGE = 'Reactive cycle: an effect keeps rewriting what it reads'
 const queue = new Set()
 let batchDepth = 0
 let isScheduled = false
@@ -33,12 +35,34 @@ function flush() {
 
   isFlushing = true
 
+  const runCounts = new Map()
+  const errors = []
+
   try {
     for (const effect of queue) {
       queue.delete(effect)
-      effect.execute()
+      countRun(runCounts, effect)
+
+      try {
+        effect.execute()
+      } catch (error) {
+        errors.push(error)
+      }
     }
   } finally {
     isFlushing = false
   }
+
+  if (errors.length > 0) throw errors[0]
+}
+
+function countRun(runCounts, effect) {
+  const runCount = (runCounts.get(effect) ?? 0) + 1
+
+  if (runCount > MAX_RUNS_PER_FLUSH) {
+    queue.clear()
+    throw new Error(CYCLE_MESSAGE)
+  }
+
+  runCounts.set(effect, runCount)
 }
