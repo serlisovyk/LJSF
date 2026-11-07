@@ -91,7 +91,8 @@ If a change materially reshapes a pattern, update the matching skill in the same
   Stylelint (`stylelint-config-standard`).
 - Pre-commit: Husky runs lint-staged (`.lintstagedrc.json`): ESLint, Stylelint and Prettier on staged
   files; fix what it reports.
-- Size: `.size-limit.json` holds the budget of the `ljsf` core; `pnpm size` builds and checks it.
+- Size: `.size-limit.json` holds the budgets of the `ljsf` core and of Shelf JS and CSS; `pnpm size`
+  builds and checks them. CI runs the Verification checks on every push.
 
 ## Commands
 
@@ -102,7 +103,7 @@ pnpm build           # build ljsf, then Shelf
 pnpm test            # Vitest once, in every package that has tests
 pnpm lint:fix        # ESLint with --fix
 pnpm format          # apply Prettier
-pnpm size            # build ljsf and check the size budget
+pnpm size            # build everything and check the size budgets
 ```
 
 ## Language

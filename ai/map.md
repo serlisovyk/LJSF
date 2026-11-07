@@ -14,7 +14,8 @@ Navigation only: where things live and who owns what. How it works is in the cod
 - `eslint.config.js` — flat config: recommended rules, browser globals for packages, apps and examples, Node globals for configs, Prettier.
 - `stylelint.config.js` — `stylelint-config-standard`. `.prettierrc`, `.prettierignore` — Prettier.
 - `.husky/pre-commit`, `.lintstagedrc.json` — the pre-commit hook: lint-staged runs ESLint, Stylelint and Prettier on staged files.
-- `.size-limit.json` — size budgets; the `ljsf` core is checked against its built `dist/ljsf.js`, gzipped.
+- `.size-limit.json` — size budgets: the `ljsf` core, Shelf JS and Shelf CSS, each checked built and gzipped.
+- `.github/workflows/ci.yml` — CI on every push: install, lint, lint:css, format:check, test, build, size.
 - `AGENTS.md` — the entry point for agents; `CLAUDE.md` points to it.
 - `ai/` — agent docs: this map, `workflow.md`, `rules/`, `skills/`, `decisions/`, `prompts/`,
   `linear-task-template.md`, and the archive `superpowers/` (`plans/`, `specs/`).

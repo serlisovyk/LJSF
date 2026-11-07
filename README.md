@@ -15,7 +15,7 @@ the workspace.
 - `ljsf` builds in Vite library mode, single public entry `packages/ljsf/src/index.js`
 - Vitest + happy-dom test setup in `packages/ljsf`
 - ESLint (flat config), Prettier, Stylelint and a pre-commit hook from the first commit
-- Size budget for the framework core in `.size-limit.json`
+- Size budgets for the framework core and Shelf in `.size-limit.json`, enforced by CI
 
 ## 🧰 Tech Stack
 
@@ -94,7 +94,8 @@ pnpm format:check
 
 ### Size
 
-Builds `ljsf` and checks the gzipped core against the budget in `.size-limit.json`.
+Builds every package and checks the gzipped core and the Shelf JS and CSS against the budgets in
+`.size-limit.json`.
 
 ```bash
 pnpm size
@@ -103,3 +104,6 @@ pnpm size
 ## 🔄 CI
 
 The pre-commit hook runs ESLint, Stylelint and Prettier on staged files via Husky + lint-staged.
+
+Every push runs GitHub Actions: install with the frozen lockfile, then lint, CSS lint, format check,
+tests, build and the size check. Going over a budget in `.size-limit.json` fails the run.

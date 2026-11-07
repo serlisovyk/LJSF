@@ -47,6 +47,7 @@ Not decisions: one-off task details, plain current-state facts, a choice nobody 
 - [Only the tooling files the project uses](2026-11-07-tooling-files.md)
 - [Vitest, happy-dom and TDD](2026-11-07-vitest-and-tdd.md)
 - [Merge locally into `main`, no pull requests](2026-11-07-local-merge-without-pr.md)
+- [Size budgets: core 5 kB, Shelf JS 30 kB, CSS 10 kB](2026-11-07-size-budgets.md)
 
 ### Framework
 
