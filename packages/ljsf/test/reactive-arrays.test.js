@@ -1,15 +1,15 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { effect, reactive } from '../src/reactivity/index.js'
 import { flushMicrotasks } from './helpers.js'
 
 describe('reactive arrays', () => {
-  it('reads like the plain array', () => {
+  test('reads like the plain array', () => {
     const items = reactive(['a', 'b'])
 
     expect([items.length, items[1], items.includes('a')]).toEqual([2, 'b', true])
   })
 
-  it('wraps an array nested in an object', async () => {
+  test('wraps an array nested in an object', async () => {
     const state = reactive({ items: ['a'] })
     const seen = []
 
@@ -20,13 +20,13 @@ describe('reactive arrays', () => {
     expect(seen).toEqual([1, 2])
   })
 
-  it('returns the same wrapper for the same nested array', () => {
+  test('returns the same wrapper for the same nested array', () => {
     const state = reactive({ items: [] })
 
     expect(state.items).toBe(state.items)
   })
 
-  it('wraps objects inside an array lazily', async () => {
+  test('wraps objects inside an array lazily', async () => {
     const items = reactive([{ title: 'Dune', isRead: false }])
     const seen = []
 
@@ -39,7 +39,7 @@ describe('reactive arrays', () => {
 })
 
 describe('reactive array writes', () => {
-  it('reruns a length reader after push', async () => {
+  test('reruns a length reader after push', async () => {
     const items = reactive(['a'])
     const seen = []
 
@@ -50,7 +50,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([1, 2])
   })
 
-  it('reruns an iterating effect after push', async () => {
+  test('reruns an iterating effect after push', async () => {
     const items = reactive(['a'])
     const seen = []
 
@@ -61,7 +61,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([['A'], ['A', 'B']])
   })
 
-  it('reruns a for...of loop after push', async () => {
+  test('reruns a for...of loop after push', async () => {
     const items = reactive(['a'])
     const seen = []
 
@@ -76,7 +76,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([['a'], ['a', 'b']])
   })
 
-  it('runs an effect once for a push of several items', async () => {
+  test('runs an effect once for a push of several items', async () => {
     const items = reactive([])
     const run = vi.fn(() => items.length)
 
@@ -88,7 +88,7 @@ describe('reactive array writes', () => {
     expect(run).toHaveLastReturnedWith(3)
   })
 
-  it('does not rerun an effect that read another index after push', async () => {
+  test('does not rerun an effect that read another index after push', async () => {
     const items = reactive(['a'])
     const run = vi.fn(() => items[0])
 
@@ -99,7 +99,7 @@ describe('reactive array writes', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('reruns an index reader after an index write', async () => {
+  test('reruns an index reader after an index write', async () => {
     const items = reactive(['a', 'b'])
     const seen = []
 
@@ -110,7 +110,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual(['b', 'c'])
   })
 
-  it('does not rerun a reader of another index after an index write', async () => {
+  test('does not rerun a reader of another index after an index write', async () => {
     const items = reactive(['a', 'b'])
     const run = vi.fn(() => items[0])
 
@@ -121,7 +121,7 @@ describe('reactive array writes', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('reruns a length reader when an index past the end is written', async () => {
+  test('reruns a length reader when an index past the end is written', async () => {
     const items = reactive(['a'])
     const seen = []
 
@@ -132,7 +132,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([1, 4])
   })
 
-  it('reruns a reader of a missing index when it is written', async () => {
+  test('reruns a reader of a missing index when it is written', async () => {
     const items = reactive([])
     const seen = []
 
@@ -143,7 +143,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([undefined, 'a'])
   })
 
-  it('reruns a length reader after pop and returns the item', async () => {
+  test('reruns a length reader after pop and returns the item', async () => {
     const items = reactive(['a', 'b'])
     const seen = []
 
@@ -155,7 +155,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([2, 1])
   })
 
-  it('reruns an iterating effect after shift', async () => {
+  test('reruns an iterating effect after shift', async () => {
     const items = reactive(['a', 'b', 'c'])
     const seen = []
 
@@ -170,7 +170,7 @@ describe('reactive array writes', () => {
     ])
   })
 
-  it('reruns an iterating effect after unshift', async () => {
+  test('reruns an iterating effect after unshift', async () => {
     const items = reactive(['b'])
     const seen = []
 
@@ -181,7 +181,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([['b'], ['a', 'b']])
   })
 
-  it('reruns an iterating effect after splice removes items', async () => {
+  test('reruns an iterating effect after splice removes items', async () => {
     const items = reactive(['a', 'b', 'c', 'd'])
     const seen = []
 
@@ -196,7 +196,7 @@ describe('reactive array writes', () => {
     ])
   })
 
-  it('reruns an iterating effect after splice inserts items', async () => {
+  test('reruns an iterating effect after splice inserts items', async () => {
     const items = reactive(['a', 'd'])
     const seen = []
 
@@ -210,7 +210,7 @@ describe('reactive array writes', () => {
     ])
   })
 
-  it('reruns an index reader after splice moves its item', async () => {
+  test('reruns an index reader after splice moves its item', async () => {
     const items = reactive(['a', 'b', 'c'])
     const seen = []
 
@@ -221,7 +221,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual(['b', 'c'])
   })
 
-  it('reruns readers of removed indexes when length is cut', async () => {
+  test('reruns readers of removed indexes when length is cut', async () => {
     const items = reactive(['a', 'b', 'c'])
     const seen = []
 
@@ -232,7 +232,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual(['c', undefined])
   })
 
-  it('reruns an iterating effect when length is cut', async () => {
+  test('reruns an iterating effect when length is cut', async () => {
     const items = reactive(['a', 'b', 'c'])
     const seen = []
 
@@ -243,7 +243,7 @@ describe('reactive array writes', () => {
     expect(seen).toEqual([['a', 'b', 'c'], []])
   })
 
-  it('keeps the raw array in step with the proxy', () => {
+  test('keeps the raw array in step with the proxy', () => {
     const target = ['a']
     const items = reactive(target)
 
@@ -253,7 +253,7 @@ describe('reactive array writes', () => {
     expect(target).toEqual(['b'])
   })
 
-  it('does not subscribe an effect to an array it only mutates', async () => {
+  test('does not subscribe an effect to an array it only mutates', async () => {
     const log = reactive([])
     const source = reactive({ value: 1 })
     const run = vi.fn(() => log.push(source.value))

@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { effect, signal } from '../src/reactivity/index.js'
 import { flushMicrotasks } from './helpers.js'
 
 describe('effect', () => {
-  it('runs once immediately', () => {
+  test('runs once immediately', () => {
     const run = vi.fn()
 
     effect(run)
@@ -11,7 +11,7 @@ describe('effect', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('reruns after a signal it read changes', async () => {
+  test('reruns after a signal it read changes', async () => {
     const page = signal(1)
     const seen = []
 
@@ -22,7 +22,7 @@ describe('effect', () => {
     expect(seen).toEqual([1, 2])
   })
 
-  it('does not rerun for a signal it did not read', async () => {
+  test('does not rerun for a signal it did not read', async () => {
     const page = signal(1)
     const query = signal('')
     const run = vi.fn(() => page.get())
@@ -34,7 +34,7 @@ describe('effect', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('does not rerun when the same value is written', async () => {
+  test('does not rerun when the same value is written', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -45,7 +45,7 @@ describe('effect', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('drops a dependency the last run no longer reads', async () => {
+  test('drops a dependency the last run no longer reads', async () => {
     const isLong = signal(true)
     const long = signal('long')
     const short = signal('short')
@@ -61,7 +61,7 @@ describe('effect', () => {
     expect(run).not.toHaveBeenCalled()
   })
 
-  it('subscribes to a dependency a later run starts reading', async () => {
+  test('subscribes to a dependency a later run starts reading', async () => {
     const isShort = signal(false)
     const short = signal('short')
     const run = vi.fn(() => isShort.get() && short.get())
@@ -76,7 +76,7 @@ describe('effect', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('stops running once the returned disposer is called', async () => {
+  test('stops running once the returned disposer is called', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 

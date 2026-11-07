@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { computed, effect, signal } from '../src/reactivity/index.js'
 import { flushMicrotasks } from './helpers.js'
 
 describe('computed', () => {
-  it('is not calculated until it is read', () => {
+  test('is not calculated until it is read', () => {
     const page = signal(1)
     const calculate = vi.fn(() => page.get() * 2)
 
@@ -12,14 +12,14 @@ describe('computed', () => {
     expect(calculate).not.toHaveBeenCalled()
   })
 
-  it('returns the calculated value', () => {
+  test('returns the calculated value', () => {
     const page = signal(2)
     const double = computed(() => page.get() * 2)
 
     expect(double.get()).toBe(4)
   })
 
-  it('caches the value while its sources are unchanged', () => {
+  test('caches the value while its sources are unchanged', () => {
     const page = signal(1)
     const calculate = vi.fn(() => page.get() * 2)
     const double = computed(calculate)
@@ -30,7 +30,7 @@ describe('computed', () => {
     expect(calculate).toHaveBeenCalledTimes(1)
   })
 
-  it('is recalculated on the next read after a source changed', () => {
+  test('is recalculated on the next read after a source changed', () => {
     const page = signal(1)
     const calculate = vi.fn(() => page.get() * 2)
     const double = computed(calculate)
@@ -43,7 +43,7 @@ describe('computed', () => {
     expect(calculate).toHaveBeenCalledTimes(2)
   })
 
-  it('is recalculated once however many sources changed', () => {
+  test('is recalculated once however many sources changed', () => {
     const first = signal(1)
     const second = signal(2)
     const calculate = vi.fn(() => first.get() + second.get())
@@ -57,7 +57,7 @@ describe('computed', () => {
     expect(calculate).toHaveBeenCalledTimes(2)
   })
 
-  it('drops a source the last calculation no longer read', () => {
+  test('drops a source the last calculation no longer read', () => {
     const isLong = signal(true)
     const long = signal('long')
     const short = signal('short')
@@ -73,7 +73,7 @@ describe('computed', () => {
     expect(calculate).toHaveBeenCalledTimes(2)
   })
 
-  it('chains through other computed values', () => {
+  test('chains through other computed values', () => {
     const page = signal(1)
     const double = computed(() => page.get() * 2)
     const quadruple = computed(() => double.get() * 2)
@@ -83,7 +83,7 @@ describe('computed', () => {
     expect(quadruple.get()).toBe(12)
   })
 
-  it('reruns an effect that read it when a source changes', async () => {
+  test('reruns an effect that read it when a source changes', async () => {
     const page = signal(1)
     const double = computed(() => page.get() * 2)
     const seen = []
@@ -95,7 +95,7 @@ describe('computed', () => {
     expect(seen).toEqual([2, 4])
   })
 
-  it('reruns an effect through a chain of computed values', async () => {
+  test('reruns an effect through a chain of computed values', async () => {
     const page = signal(1)
     const double = computed(() => page.get() * 2)
     const quadruple = computed(() => double.get() * 2)
@@ -108,7 +108,7 @@ describe('computed', () => {
     expect(seen).toEqual([4, 8])
   })
 
-  it('does not rerun an effect for a change in a source it never read', async () => {
+  test('does not rerun an effect for a change in a source it never read', async () => {
     const page = signal(1)
     const query = signal('')
     const double = computed(() => page.get() * 2)

@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { batch, effect, signal } from '../src/reactivity/index.js'
 import { flushMicrotasks } from './helpers.js'
 
 describe('batching', () => {
-  it('runs an effect once for several writes in a row', async () => {
+  test('runs an effect once for several writes in a row', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -17,7 +17,7 @@ describe('batching', () => {
     expect(run).toHaveLastReturnedWith(4)
   })
 
-  it('does not rerun an effect synchronously after a write', () => {
+  test('does not rerun an effect synchronously after a write', () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -27,7 +27,7 @@ describe('batching', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('runs an effect once for writes to different signals it read', async () => {
+  test('runs an effect once for writes to different signals it read', async () => {
     const page = signal(1)
     const query = signal('')
     const run = vi.fn(() => [page.get(), query.get()])
@@ -42,7 +42,7 @@ describe('batching', () => {
 })
 
 describe('batch', () => {
-  it('runs the triggered effects right after the callback', () => {
+  test('runs the triggered effects right after the callback', () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -57,11 +57,11 @@ describe('batch', () => {
     expect(run).toHaveLastReturnedWith(3)
   })
 
-  it('returns the callback result', () => {
+  test('returns the callback result', () => {
     expect(batch(() => 42)).toBe(42)
   })
 
-  it('flushes only when the outermost batch ends', () => {
+  test('flushes only when the outermost batch ends', () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -74,7 +74,7 @@ describe('batch', () => {
     expect(run).toHaveBeenCalledTimes(2)
   })
 
-  it('flushes even when the callback throws', () => {
+  test('flushes even when the callback throws', () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -89,7 +89,7 @@ describe('batch', () => {
     expect(run).toHaveBeenCalledTimes(2)
   })
 
-  it('runs the first pass of an effect created inside immediately', () => {
+  test('runs the first pass of an effect created inside immediately', () => {
     const run = vi.fn()
 
     batch(() => {

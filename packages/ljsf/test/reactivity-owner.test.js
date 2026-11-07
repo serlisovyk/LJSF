@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { Owner, effect, signal } from '../src/reactivity/index.js'
 import { flushMicrotasks } from './helpers.js'
 
 describe('Owner', () => {
-  it('stops the effects created in its scope when disposed', async () => {
+  test('stops the effects created in its scope when disposed', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
     const owner = new Owner()
@@ -16,7 +16,7 @@ describe('Owner', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('keeps the effects created outside its scope', async () => {
+  test('keeps the effects created outside its scope', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
     const owner = new Owner()
@@ -29,13 +29,13 @@ describe('Owner', () => {
     expect(run).toHaveBeenCalledTimes(2)
   })
 
-  it('returns the scope callback result', () => {
+  test('returns the scope callback result', () => {
     const owner = new Owner()
 
     expect(owner.scope(() => 42)).toBe(42)
   })
 
-  it('leaves the scope even when the callback throws', async () => {
+  test('leaves the scope even when the callback throws', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
     const owner = new Owner()
@@ -53,7 +53,7 @@ describe('Owner', () => {
     expect(run).toHaveBeenCalledTimes(2)
   })
 
-  it('disposes child owners with their parent', async () => {
+  test('disposes child owners with their parent', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
     const parent = new Owner()
@@ -69,7 +69,7 @@ describe('Owner', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('can be disposed twice', () => {
+  test('can be disposed twice', () => {
     const owner = new Owner()
 
     owner.dispose()
@@ -77,7 +77,7 @@ describe('Owner', () => {
     expect(() => owner.dispose()).not.toThrow()
   })
 
-  it('can be disposed after an effect it owns was disposed', () => {
+  test('can be disposed after an effect it owns was disposed', () => {
     const owner = new Owner()
     const dispose = owner.scope(() => effect(() => {}))
 
@@ -88,7 +88,7 @@ describe('Owner', () => {
 })
 
 describe('effect ownership', () => {
-  it('disposes an effect created inside another one with its parent', async () => {
+  test('disposes an effect created inside another one with its parent', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -102,7 +102,7 @@ describe('effect ownership', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('disposes the effects of the previous run when an effect reruns', async () => {
+  test('disposes the effects of the previous run when an effect reruns', async () => {
     const outer = signal(1)
     const inner = signal(1)
     const run = vi.fn(() => inner.get())
@@ -120,7 +120,7 @@ describe('effect ownership', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('does not run an effect disposed while it was queued', async () => {
+  test('does not run an effect disposed while it was queued', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
@@ -132,7 +132,7 @@ describe('effect ownership', () => {
     expect(run).toHaveBeenCalledTimes(1)
   })
 
-  it('does not run a queued effect whose owner was disposed', async () => {
+  test('does not run a queued effect whose owner was disposed', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
     const owner = new Owner()

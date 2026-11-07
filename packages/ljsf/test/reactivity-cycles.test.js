@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { batch, effect, signal } from '../src/reactivity/index.js'
 import { flushMicrotasks } from './helpers.js'
 
@@ -6,7 +6,7 @@ const RUNAWAY_RUNS = 1000
 const CYCLE_ERROR = /Reactive cycle/
 
 describe('cycle protection', () => {
-  it('throws when an effect keeps rewriting its own dependency', () => {
+  test('throws when an effect keeps rewriting its own dependency', () => {
     const count = signal(0)
     let runs = 0
 
@@ -20,7 +20,7 @@ describe('cycle protection', () => {
     ).toThrow(CYCLE_ERROR)
   })
 
-  it('stops the runaway effect instead of running it forever', () => {
+  test('stops the runaway effect instead of running it forever', () => {
     const count = signal(0)
     const run = vi.fn(() => {
       if (run.mock.calls.length < RUNAWAY_RUNS) count.set(count.get() + 1)
@@ -30,7 +30,7 @@ describe('cycle protection', () => {
     expect(run.mock.calls.length).toBeLessThan(RUNAWAY_RUNS)
   })
 
-  it('throws for two effects that keep triggering each other', () => {
+  test('throws for two effects that keep triggering each other', () => {
     const ping = signal(0)
     const pong = signal(0)
     let runs = 0
@@ -47,7 +47,7 @@ describe('cycle protection', () => {
     ).toThrow(CYCLE_ERROR)
   })
 
-  it('lets an effect that settles rewrite its own dependency', () => {
+  test('lets an effect that settles rewrite its own dependency', () => {
     const count = signal(0)
     const seen = []
 
@@ -61,7 +61,7 @@ describe('cycle protection', () => {
     expect(seen).toEqual([0, 1, 2, 3, 4, 5])
   })
 
-  it('keeps scheduling effects after a cycle was reported', async () => {
+  test('keeps scheduling effects after a cycle was reported', async () => {
     const count = signal(0)
     const page = signal(1)
     const run = vi.fn(() => page.get())
@@ -84,7 +84,7 @@ describe('cycle protection', () => {
 })
 
 describe('effect errors', () => {
-  it('runs the other queued effects when one throws and rethrows the error', () => {
+  test('runs the other queued effects when one throws and rethrows the error', () => {
     const page = signal(1)
     const other = vi.fn(() => page.get())
 
@@ -97,7 +97,7 @@ describe('effect errors', () => {
     expect(other).toHaveBeenCalledTimes(2)
   })
 
-  it('keeps scheduling effects after one threw', async () => {
+  test('keeps scheduling effects after one threw', async () => {
     const page = signal(1)
     const run = vi.fn(() => page.get())
 
