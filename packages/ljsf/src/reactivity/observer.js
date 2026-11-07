@@ -2,6 +2,10 @@ import { Owner } from './owner.js'
 
 let activeObserver = null
 
+export function isTracking() {
+  return activeObserver !== null
+}
+
 export class Dependency {
   #subscribers = new Set()
 
