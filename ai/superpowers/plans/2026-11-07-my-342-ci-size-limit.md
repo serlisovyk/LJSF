@@ -17,9 +17,11 @@ next to the `ljsf` core, a `size` script that builds what it measures. Out (auth
      `permissions: contents: read`.
    - One job on `ubuntu-latest`: `actions/checkout`, `pnpm/action-setup` (no `version`, it reads
      `packageManager`), `actions/setup-node` with Node 24 and `cache: pnpm`,
-     `pnpm install --frozen-lockfile`, then `lint`, `lint:css`, `format:check`, `test`, `build`, `size`:
+     `pnpm install --frozen-lockfile`, then `lint`, `lint:css`, `format:check`, `test`, `build`, then
+     `pnpm exec size-limit` (the build step already produced `dist`, so `pnpm size` would build twice):
      the order of `AGENTS.md` (Verification) with the cheap checks first.
-   - Actions are pinned to a major version tag.
+   - Actions are pinned to a major version tag, one that runs on node24 (`checkout@v7`,
+     `setup-node@v7`, `pnpm/action-setup@v6`).
 2. `.size-limit.json`
    - Keep `ljsf core` (5 kB). Add `Shelf JS` (`apps/shelf/dist/assets/*.js`, 30 kB) and `Shelf CSS`
      (`apps/shelf/dist/assets/*.css`, 10 kB), all gzip. Hashed file names are why the entries are globs.
