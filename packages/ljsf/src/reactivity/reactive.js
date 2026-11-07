@@ -1,13 +1,26 @@
-import { Dependency, isTracking } from './observer.js'
+import { Dependency, isTracking, untracked } from './observer.js'
 
 const UNSUPPORTED_MESSAGE = 'reactive() supports plain objects and arrays only'
 const ITERATE = Symbol('iterate')
+const LENGTH = 'length'
+const MUTATOR_NAMES = ['push', 'pop', 'shift', 'unshift', 'splice']
 const proxies = new WeakMap()
 const reactives = new WeakSet()
 const dependencies = new WeakMap()
 
+const MUTATORS = Object.fromEntries(
+  MUTATOR_NAMES.map((name) => [
+    name,
+    function (...args) {
+      return untracked(() => Array.prototype[name].apply(this, args))
+    },
+  ]),
+)
+
 const HANDLER = {
   get(target, key, receiver) {
+    if (Array.isArray(target) && Object.hasOwn(MUTATORS, key)) return MUTATORS[key]
+
     track(target, key)
 
     const value = Reflect.get(target, key, receiver)
@@ -30,10 +43,13 @@ const HANDLER = {
   set(target, key, value, receiver) {
     const hadKey = Object.hasOwn(target, key)
     const oldValue = target[key]
+    const oldLength = target.length
     const isSet = Reflect.set(target, key, value, receiver)
 
     if (!hadKey) triggerStructure(target, key)
     else if (!Object.is(oldValue, value)) trigger(target, key)
+
+    if (Array.isArray(target)) triggerLength(target, key, value, oldLength)
 
     return isSet
   },
@@ -63,6 +79,7 @@ export function reactive(target) {
 }
 
 function isWrappable(value) {
+  if (Array.isArray(value)) return true
   if (typeof value !== 'object' || value === null) return false
 
   const prototype = Object.getPrototypeOf(value)
@@ -90,6 +107,27 @@ function track(target, key) {
 
 function trigger(target, key) {
   dependencies.get(target)?.get(key)?.trigger()
+}
+
+function triggerLength(target, key, value, oldLength) {
+  if (key !== LENGTH) {
+    if (target.length !== oldLength) trigger(target, LENGTH)
+    return
+  }
+
+  if (value < oldLength) triggerTruncated(target, value)
+}
+
+function triggerTruncated(target, length) {
+  const keys = dependencies.get(target)
+  if (!keys) return
+
+  for (const [key, dependency] of keys) {
+    const isRemovedIndex = typeof key === 'string' && Number(key) >= length
+    if (isRemovedIndex) dependency.trigger()
+  }
+
+  trigger(target, ITERATE)
 }
 
 function triggerStructure(target, key) {

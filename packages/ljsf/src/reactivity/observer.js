@@ -6,6 +6,21 @@ export function isTracking() {
   return activeObserver !== null
 }
 
+export function untracked(fn) {
+  return runAs(null, fn)
+}
+
+function runAs(observer, fn) {
+  const previousObserver = activeObserver
+  activeObserver = observer
+
+  try {
+    return fn()
+  } finally {
+    activeObserver = previousObserver
+  }
+}
+
 export class Dependency {
   #subscribers = new Set()
 
@@ -31,14 +46,7 @@ export class Observer extends Owner {
   observe(fn) {
     this.#unsubscribe()
 
-    const previousObserver = activeObserver
-    activeObserver = this
-
-    try {
-      return fn()
-    } finally {
-      activeObserver = previousObserver
-    }
+    return runAs(this, fn)
   }
 
   dispose() {
