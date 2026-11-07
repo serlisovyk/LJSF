@@ -1,0 +1,20 @@
+{
+  "name": "shelf",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shelf — reading tracker built on ljsf and the Open Library API",
+  "license": "MIT",
+  "author": "Serhii Lisovyk",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ljsf": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^8.3.6"
+  }
+}

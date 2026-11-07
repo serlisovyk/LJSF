@@ -1,0 +1,8 @@
+[
+  {
+    "name": "ljsf core",
+    "path": "packages/ljsf/dist/ljsf.js",
+    "limit": "5 kB",
+    "gzip": true
+  }
+]

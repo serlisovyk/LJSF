@@ -1,0 +1,38 @@
+{
+  "name": "ljsf-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ljsf — light JavaScript framework and Shelf, a reading tracker built on it",
+  "license": "MIT",
+  "author": "Serhii Lisovyk",
+  "type": "module",
+  "packageManager": "pnpm@12.3.4",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --filter shelf dev",
+    "build": "pnpm -r build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:css": "stylelint \"**/*.css\"",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "prepare": "husky",
+    "test": "pnpm -r test",
+    "size": "pnpm --filter ljsf build && size-limit"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@size-limit/preset-small-lib": "^14.3.0",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10",
+    "size-limit": "^14.3.0",
+    "stylelint": "^18.0.0",
+    "stylelint-config-standard": "^41.0.0"
+  }
+}
