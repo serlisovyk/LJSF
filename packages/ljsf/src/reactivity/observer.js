@@ -11,7 +11,7 @@ export class Dependency {
   }
 
   trigger() {
-    for (const subscriber of [...this.#subscribers]) subscriber.notify()
+    for (const subscriber of this.#subscribers) subscriber.notify()
   }
 
   unsubscribe(observer) {

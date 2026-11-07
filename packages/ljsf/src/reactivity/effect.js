@@ -1,4 +1,5 @@
 import { Observer } from './observer.js'
+import { schedule } from './scheduler.js'
 
 export class Effect extends Observer {
   #fn
@@ -10,7 +11,7 @@ export class Effect extends Observer {
   }
 
   notify() {
-    this.execute()
+    schedule(this)
   }
 
   execute() {
