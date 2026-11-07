@@ -39,8 +39,12 @@ apps/
   shelf/           reading tracker on ljsf
     src/           app entry and styles
 examples/          small standalone apps on ljsf
-docs/              API reference and decisions
+docs/              public docs of the framework
+ai/                agent docs: workflow, map, rules, skills, decisions, prompts
 ```
+
+Agent instructions start at [AGENTS.md](AGENTS.md), the repo map at [ai/map.md](ai/map.md), the
+reasons behind key choices at [ai/decisions/](ai/decisions/README.md).
 
 ## 🚀 Scripts
 

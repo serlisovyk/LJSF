@@ -1,3 +1,4 @@
 # Docs
 
-ljsf API reference and project decisions. Filled as framework modules land.
+Public documentation of the ljsf framework: one page per module, added as the module lands. Agent docs
+live in [`ai/`](../ai/map.md).
